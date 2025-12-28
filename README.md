@@ -44,3 +44,15 @@ No packages published
 Publish your first package
 Footer
 © 202
+
+CREATE TABLE Employees (
+    EmployeeId INT IDENTITY(1,1) PRIMARY KEY,
+    FullName NVARCHAR(100) ,
+    DateOfBirth DATE,
+    Email NVARCHAR(100),
+    PhoneNumber NVARCHAR(15),
+    Gender NVARCHAR(10),
+    Country NVARCHAR(50),
+    ProfileImage NVARCHAR(200),
+    CreatedAt DATETIME DEFAULT GETDATE()
+);

@@ -1,0 +1,11 @@
+﻿@model Employee
+
+<h3>Confirm Delete</h3>
+
+<p>Are you sure you want to delete <b>@Model.FullName</b>?</p>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="EmployeeId" value="@Model.EmployeeId" />
+    <button class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

@@ -1,0 +1,130 @@
+﻿@model IEnumerable<Employee>
+
+@{
+    ViewData["Title"] = "Employee List";
+}
+
+<!-- SweetAlert Success Message -->
+@if (TempData["success"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '@TempData["success"]',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    </script>
+}
+
+<h2 class="mb-3">Employee Management</h2>
+
+<!-- Search -->
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input type="text"
+               name="search"
+               value="@ViewBag.Search"
+               class="form-control"
+               placeholder="Search by name..." />
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-info w-100">Search</button>
+    </div>
+</form>
+
+<!-- Add Employee -->
+<a asp-action="Create" class="btn btn-primary mb-3">Add Employee</a>
+
+<!-- Employee Table -->
+<table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Profile</th>
+            <th>Full Name</th>
+            <th>Date of Birth</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Gender</th>
+            <th>Country</th>
+            <th style="width:180px">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EmployeeId</td>
+                <td>
+                    <img src="~/images/@(string.IsNullOrEmpty(item.ProfileImage) ? "default.png" : item.ProfileImage)"
+                         width="60"
+                         height="60"
+                         class="rounded-circle"
+                         alt="Profile Image" />
+                </td>
+                <td>@item.FullName</td>
+                <td>@item.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                <td>@item.Email</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.Gender</td>
+                <td>@item.Country</td>
+                <td>
+                    <a asp-action="Edit"
+                       asp-route-id="@item.EmployeeId"
+                       class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+                    <a asp-action="DeleteConfirm"
+                       asp-route-id="@item.EmployeeId"
+                       class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination -->
+@if (ViewBag.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center">
+
+            <!-- Previous -->
+            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(ViewBag.CurrentPage - 1)"
+                   asp-route-search="@ViewBag.Search">
+                    Previous
+                </a>
+            </li>
+
+            <!-- Page Numbers -->
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-search="@ViewBag.Search">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <!-- Next -->
+            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(ViewBag.CurrentPage + 1)"
+                   asp-route-search="@ViewBag.Search">
+                    Next
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+}
